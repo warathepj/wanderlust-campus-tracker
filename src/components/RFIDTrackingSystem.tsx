@@ -14,7 +14,11 @@ interface Student {
   lastUpdate: string;
 }
 
-const RFIDTrackingSystem: React.FC = () => {
+interface RFIDTrackingSystemProps {
+  sendStudentData: (studentsData: Student[]) => void;
+}
+
+const RFIDTrackingSystem: React.FC<RFIDTrackingSystemProps> = ({ sendStudentData }) => {
   const [students, setStudents] = useState<Student[]>([]);
   const [isSimulationRunning, setIsSimulationRunning] = useState(false);
   const [lastUpdateTime, setLastUpdateTime] = useState<string>('');
@@ -49,16 +53,19 @@ const RFIDTrackingSystem: React.FC = () => {
     }));
     setStudents(initialStudents);
     setLastUpdateTime(new Date().toLocaleTimeString());
+    sendStudentData(initialStudents); // Send initial data
   };
 
   const updateStudentLocations = () => {
-    setStudents(prevStudents => 
-      prevStudents.map(student => ({
+    setStudents(prevStudents => {
+      const updatedStudents = prevStudents.map(student => ({
         ...student,
         location: Math.random() > 0.7 ? locations[Math.floor(Math.random() * locations.length)] : student.location,
         lastUpdate: new Date().toLocaleTimeString()
-      }))
-    );
+      }));
+      sendStudentData(updatedStudents); // Send updated data
+      return updatedStudents;
+    });
     setLastUpdateTime(new Date().toLocaleTimeString());
   };
 
