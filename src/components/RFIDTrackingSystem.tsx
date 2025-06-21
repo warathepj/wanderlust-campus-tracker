@@ -12,6 +12,7 @@ interface Student {
   name: string;
   location: string;
   lastUpdate: string;
+  telegram: string;
 }
 
 interface RFIDTrackingSystemProps {
@@ -44,12 +45,26 @@ const RFIDTrackingSystem: React.FC<RFIDTrackingSystemProps> = ({ sendStudentData
     'Jack Thompson'
   ];
 
+  const telegramNumbers = [
+    '1118223018',
+    '5827194306',
+    '9015672834',
+    '3489105726',
+    '7250918463',
+    '1634879052',
+    '8971236540',
+    '4062583917',
+    '2398457601',
+    '6743021895'
+  ];
+
   const initializeStudents = () => {
     const initialStudents = studentNames.map((name, index) => ({
       id: index + 1,
       name,
       location: locations[Math.floor(Math.random() * locations.length)],
-      lastUpdate: new Date().toLocaleTimeString()
+      lastUpdate: new Date().toLocaleTimeString(),
+      telegram: telegramNumbers[index] // Assign telegram number
     }));
     setStudents(initialStudents);
     setLastUpdateTime(new Date().toLocaleTimeString());
@@ -61,7 +76,8 @@ const RFIDTrackingSystem: React.FC<RFIDTrackingSystemProps> = ({ sendStudentData
       const updatedStudents = prevStudents.map(student => ({
         ...student,
         location: Math.random() > 0.7 ? locations[Math.floor(Math.random() * locations.length)] : student.location,
-        lastUpdate: new Date().toLocaleTimeString()
+        lastUpdate: new Date().toLocaleTimeString(),
+        telegram: student.telegram // Preserve telegram number
       }));
       sendStudentData(updatedStudents); // Send updated data
       return updatedStudents;
